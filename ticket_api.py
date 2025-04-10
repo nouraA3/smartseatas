@@ -10,7 +10,8 @@ ticket_db = pd.read_csv("ticketdata.csv")
 # تجهيز الأعمدة المهمة فقط
 relevant_columns = [
     'IDENTITY', 'PROGRAM_NAME', 'PLAY_DATE', 'PLAY_TIME',
-    'SEAT_REGION_NAME', 'FLOOR_NO', 'SEAT_ROW', 'SEAT_NO', 'TICKET_ENTRANCE_NO'
+    'SEAT_REGION_NAME', 'FLOOR_NO', 'SEAT_ROW', 'SEAT_NO', 
+    'TICKET_ENTRANCE_NO'
 ]
 ticket_db = ticket_db[relevant_columns].dropna().drop_duplicates()
 ticket_db = ticket_db.rename(columns={
@@ -27,7 +28,7 @@ ticket_db = ticket_db.rename(columns={
 
 # دالة محاكاة لفتح المقعد
 def unlock_seat(seat_info):
-    print(f"🔓 فتح المقعد: Floor {seat_info['floor']}, Row {seat_info['row']}, Seat {seat_info['seat']}")
+    print(f"🔓open seat: Floor {seat_info['floor']}, Row {seat_info['row']}, Seat {seat_info['seat']}")
     return True
 
 @app.route("/verify-ticket", methods=["POST"])
@@ -42,13 +43,13 @@ def verify_ticket():
         unlock_result = unlock_seat(seat_info)
         return jsonify({
             "status": "valid",
-            "message": "تم التحقق من التذكرة وتم فتح المقعد.",
+            "message": "The ticket has been verified and the seat has been opend",
             "seat_opened": unlock_result
         })
     else:
         return jsonify({
             "status": "invalid",
-            "message": "تذكرة غير صالحة.",
+            "message": "invalid ticket",
             "seat_opened": False
         }), 404
 
