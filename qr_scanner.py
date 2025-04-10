@@ -1,5 +1,5 @@
-
 import cv2
+import pyzbar.pyzbar 
 from pyzbar.pyzbar import decode
 import requests
 import time
@@ -8,7 +8,7 @@ url = "http://127.0.0.1:5000/verify-ticket"
 
 def read_qr_from_camera():
     cap = cv2.VideoCapture(0)
-    print("وجهي الكود على الكاميرا...")
+    print("put the QR code in camera")
 
     while True:
         ret, frame = cap.read()
@@ -17,7 +17,7 @@ def read_qr_from_camera():
 
         for barcode in decode(frame):
             ticket_id = barcode.data.decode("utf-8")
-            print(f"QR مقروء: {ticket_id}")
+            print(f"QR readed: {ticket_id}")
 
             # إرسال الطلب إلى السيرفر
             payload = {
@@ -25,7 +25,7 @@ def read_qr_from_camera():
             }
 
             response = requests.post(url, json=payload)
-            print("الرد من السيرفر:")
+            print("server respone:")
             print(response.status_code)
             print(response.text)
 
